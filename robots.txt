@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://PENDING_DOMAIN/sitemap.xml
+Sitemap: https://skamber.xyz/sitemap.xml
