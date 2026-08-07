@@ -103,3 +103,34 @@ Still blocked honestly: music player (no owned tracks supplied), voice agent (no
   check on a real device (headless browser has no microphone).
 - Note: the ElevenLabs widget floats bottom-right above the folded call tab
   while active — acceptable overlap, revisit if owner objects.
+
+## PRODUCTION VERIFICATION — 2026-08-07, skamber.xyz on Vercel
+
+Deployment: https://skamber.vercel.app (project "skamber", repo Kambah123/skamber)
+
+| Check | Result |
+|---|---|
+| / returns 200 with correct title | PASS |
+| robots.txt, sitemap.xml return 200 | PASS |
+| app.js, styles.css, owner-profile.js return 200 | PASS |
+| All 14 image assets return 200 | PASS (spot-checked hero, mark, 4 companion states, both case art) |
+| Security headers (X-Frame-Options, nosniff, Referrer-Policy) | PASS via vercel.json |
+| Asset cache immutable 1y | PASS |
+| Canonical + og:url point at https://skamber.xyz/ | PASS |
+| JSON-LD present | PASS |
+| Contamination scan on deployed HTML/JS/CSS | CLEAN (0 matches) |
+| Desktop renders at 1440×900, all apps + dock + companion + fold | PASS (screenshot archived) |
+| Contact app opens with all routes and brief form | PASS |
+
+### DNS issue found — needs owner fix at registrar
+
+- `skamber.xyz` (apex) → Vercel serves, but 308-redirects to www (www set as
+  primary domain in Vercel).
+- `www.skamber.xyz` → 502 from "Pingora": the www DNS record still points at
+  the registrar's parking proxy, NOT at Vercel. Net effect: the apex bounces
+  visitors into a dead www.
+- Fix (either suffices, both is best):
+  1. Vercel → Project → Settings → Domains → make `skamber.xyz` the primary
+     domain and set www to "Redirect to skamber.xyz".
+  2. At the .xyz registrar DNS: delete the parking record for `www` and add
+     CNAME `www` → `cname.vercel-dns.com`.
