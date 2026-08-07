@@ -1,0 +1,47 @@
+# Bootstrap the binary assets (avatar, companion, case art) into the repo.
+# GitHub's Contents API used for the initial push only accepts text, so the
+# images travel as a published zip and this workflow commits them properly.
+#
+# Runs once automatically on first push, and can be re-run from the Actions
+# tab. Safe to DELETE this file after the assets/ directory exists.
+
+name: Bootstrap assets
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/bootstrap-assets.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Skip if assets already present
+        id: check
+        run: |
+          if [ -f assets/portraits/avatar-hero.webp ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Download asset bundle
+        if: steps.check.outputs.present == 'false'
+        run: |
+          curl -fsSL -o /tmp/skamber-assets.zip \
+            "https://pub.hyperagent.com/api/published/pbf01KZDS4PGG_YR1WR7XRWRH95PSD/skamber-assets.zip"
+          unzip -o /tmp/skamber-assets.zip -d .
+
+      - name: Commit assets
+        if: steps.check.outputs.present == 'false'
+        run: |
+          git config user.name "skamber-os-bootstrap"
+          git config user.email "[email protected]"
+          git add assets
+          git commit -m "Bootstrap binary assets (avatar, companion, case art)"
+          git push
