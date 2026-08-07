@@ -1,0 +1,4 @@
+dist-preview.html
+preview-v*.html
+__pycache__/
+.DS_Store
