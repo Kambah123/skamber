@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Building a username-first crypto bank in Nigeria — Musa Sulaiman</title>
+<meta name="description" content="Why sending money to a 44-character address is a design failure, and what it takes to replace it with @handles — embedded wallets, an internal ledger, and honest beta constraints." />
+<meta name="author" content="Musa Sulaiman" />
+<link rel="canonical" href="https://skamber.xyz/blog/username-first-crypto-bank-nigeria.html" />
+<link rel="icon" href="../assets/portraits/avatar-mark.png" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Building a username-first crypto bank in Nigeria" />
+<meta property="og:description" content="Embedded wallets, an internal ledger, AI explanations, and honest beta constraints — field notes from building Zipa solo." />
+<meta property="og:url" content="https://skamber.xyz/blog/username-first-crypto-bank-nigeria.html" />
+<meta property="og:image" content="https://skamber.xyz/assets/cases/zipa.webp" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="@0xSkamber" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Building a username-first crypto bank in Nigeria",
+  "description": "Why sending money to a 44-character address is a design failure, and what it takes to replace it with @handles.",
+  "author": { "@type": "Person", "name": "Musa Sulaiman", "url": "https://skamber.xyz/" },
+  "datePublished": "2026-08-07",
+  "dateModified": "2026-08-07",
+  "image": "https://skamber.xyz/assets/cases/zipa.webp",
+  "mainEntityOfPage": "https://skamber.xyz/blog/username-first-crypto-bank-nigeria.html"
+}
+</script>
+<style>
+  :root{
+    --green-900:#07211b;--green-800:#0d2f26;--lime:#d8f24a;--cream:#f4f1e8;
+    --fg-dim:#b9c4bd;--border:rgba(244,241,232,.16);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--green-800);color:var(--cream);
+    font-family:"Space Grotesk",system-ui,sans-serif;font-size:17px;line-height:1.7;
+  }
+  .top{
+    display:flex;align-items:center;gap:10px;padding:14px clamp(18px,6vw,64px);
+    border-bottom:1px solid var(--border);font-family:"JetBrains Mono",monospace;
+    font-size:13px;
+  }
+  .top img{border-radius:50%}
+  .top a{color:var(--lime);text-decoration:none;font-weight:700}
+  .top a:hover{text-decoration:underline}
+  article{max-width:70ch;margin:0 auto;padding:clamp(28px,6vw,64px) clamp(18px,6vw,64px) 80px}
+  .kicker{font-family:"JetBrains Mono",monospace;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);margin:0 0 12px}
+  h1{font-size:clamp(30px,5vw,44px);line-height:1.08;letter-spacing:-.02em;margin:0 0 14px}
+  .byline{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--fg-dim);margin:0 0 30px}
+  h2{font-size:23px;letter-spacing:-.01em;margin:38px 0 10px}
+  p{margin:0 0 18px}
+  .dim{color:var(--fg-dim)}
+  .hero{width:100%;height:auto;border-radius:12px;border:1px solid var(--border);margin:6px 0 30px;display:block}
+  .callout{border-left:3px solid var(--lime);padding:10px 16px;background:rgba(244,241,232,.05);border-radius:0 8px 8px 0;margin:0 0 18px}
+  code{font-family:"JetBrains Mono",monospace;font-size:.92em;background:rgba(244,241,232,.08);padding:2px 6px;border-radius:5px}
+  .cta{
+    margin-top:44px;border:1px solid var(--border);border-radius:12px;padding:22px;
+    background:rgba(244,241,232,.05);
+  }
+  .cta a{display:inline-block;background:var(--lime);color:var(--green-900);font-weight:700;
+    padding:12px 20px;border-radius:8px;text-decoration:none;margin-top:8px}
+  footer{border-top:1px solid var(--border);padding:20px clamp(18px,6vw,64px);
+    font-size:13.5px;color:var(--fg-dim);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
+  footer a{color:var(--lime)}
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <img src="../assets/portraits/avatar-mark.png" alt="" width="24" height="24" />
+  <a href="../index.html">← Skamber OS</a>
+  <span style="color:var(--fg-dim)">/ Field Notes</span>
+</nav>
+
+<article>
+  <p class="kicker">Field Notes · Fintech Infrastructure</p>
+  <h1>Building a username-first crypto bank in Nigeria</h1>
+  <p class="byline">Musa Sulaiman · 7 August 2026 · 6 min read</p>
+
+  <img class="hero" src="../assets/cases/zipa.webp" alt="Illustration of username-first payments flowing between people on a phone" width="1200" height="670" />
+
+  <p>Ask someone in Kebbi to pay you in crypto and watch what happens. You send them a 44-character Solana address. They copy it into WhatsApp, where autocorrect mangles it, or they screenshot it, retype it, and pray. If one character is wrong, the money is gone — not delayed, not reversible, gone. We normalised this because the people who built crypto infrastructure were building for traders, and traders tolerate anything. Ordinary people don't, and they shouldn't have to.</p>
+
+  <p>That's the design failure <a href="https://usezipa.xyz" rel="noopener noreferrer" target="_blank">Zipa</a> exists to fix: you send money to <code>@amina</code>, not to <code>7xKp...q3Fz</code>. This piece is a set of field notes on what that actually takes to build — and what I deliberately haven't built yet.</p>
+
+  <h2>The address is the bug</h2>
+  <p>Every crypto UX problem in Nigeria compounds from one root: the address format is hostile to humans. Bank transfers here already work through short account numbers and instant name resolution — you type ten digits, the bank shows you "MUSA SULAIMAN", you confirm, done. Crypto asked people to regress from that to hex strings with no name check and no undo. The fix isn't education. The fix is making the address disappear.</p>
+
+  <p>Username-first means the handle is the primary key of the entire product. Claim <code>@yourname</code> on sign-up, and every flow — pay, request, QR, public payment page — resolves through it. The on-chain addresses still exist underneath, but a user can go months without ever seeing one.</p>
+
+  <h2>Embedded wallets, invisible custody plumbing</h2>
+  <p>Seed phrases fail the same people addresses fail. So wallets in Zipa are created silently in the background at sign-up — Solana, Ethereum and Base — using embedded-wallet infrastructure (Privy) rather than asking anyone to write twelve words on paper. Sign up with email, phone or Google; the cryptography happens where users can't be hurt by it.</p>
+
+  <div class="callout">
+    <p style="margin:0">The trade-off is real and worth naming: embedded wallets shift trust from the user's memory to the infrastructure operator. That's the right trade for this audience — but it obliges you to be honest about custody status, which is why Zipa's beta explicitly does not hold real money yet.</p>
+  </div>
+
+  <h2>Two rails, one ledger</h2>
+  <p>The architecture splits payments into two lanes. Transfers between Zipa users settle on an internal ledger — instant, free, no gas, because nothing needs to touch a chain when both sides of the trade live in the same system. External transfers settle on the actual rails: Solana, Ethereum, Base, with Helius doing the heavy lifting on indexing. This is the same pattern every serious fintech converges on — internal book transfers plus external settlement — and it's why a Zipa-to-Zipa payment feels like sending a text.</p>
+
+  <h2>AI where it earns its place</h2>
+  <p>Every transaction in Zipa gets a plain-language explanation generated by AI: what happened, to whom, what it cost, in words a first-time user understands — with naira context, because a balance denominated only in SOL means nothing to most Nigerians. This is the standard I hold for AI in products: it has to remove confusion, not add novelty. An AI that explains your money beats an AI that chats about it.</p>
+
+  <p>The same philosophy applies to language: the interface supports five Nigerian languages, because financial confidence collapses when you're translating in your head.</p>
+
+  <h2>What I refuse to claim</h2>
+  <p>Zipa is a live public beta on test networks. It's free, it works end to end, and it does not custody real money yet. I could dress that up — plenty do — but the fastest way to lose the trust of the exact users who need this product is to blur the line between a beta and a bank. Mainnet, custody and compliance are the current frontier, and they'll be announced as facts when they're facts.</p>
+
+  <h2>Notes for builders</h2>
+  <p>If you're building fintech for African markets, three things I'd underline. First, steal the account-number-plus-name-check pattern from Nigerian banking — it's the best payments UX ever shipped here and users already trust it. Second, build the internal ledger before you obsess over chains; most of your volume will be internal if your product works. Third, label your claims. Beta means beta. Test networks mean test networks. The credibility you bank now is the moat later.</p>
+
+  <div class="cta">
+    <p style="margin:0"><strong>Building something in this space?</strong><br />
+    <span class="dim">I take on AI-native product and fintech infrastructure work — design through deployment, end to end.</span></p>
+    <a href="../index.html">Open Skamber OS →</a>
+  </div>
+</article>
+
+<footer>
+  <span>© Musa Sulaiman · Kebbi, Nigeria</span>
+  <span><a href="https://x.com/0xSkamber" rel="noopener noreferrer" target="_blank">X @0xSkamber</a> · <a href="https://github.com/KAMBAH123" rel="noopener noreferrer" target="_blank">GitHub</a> · <a href="mailto:musa@usezipa.xyz">musa@usezipa.xyz</a></span>
+</footer>
+
+</body>
+</html>
