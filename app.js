@@ -463,10 +463,21 @@ function renderSocials() {
 }
 
 function renderNotes() {
+  if (!O.articles.length) {
+    return el(`
+      <h2 class="h2">Field Notes</h2>
+      <p class="lede">Writing on AI-native product engineering and African fintech infrastructure.</p>
+      <div class="empty">No articles published yet.</div>`);
+  }
   return el(`
     <h2 class="h2">Field Notes</h2>
-    <p class="lede">Writing on AI-native product engineering and African fintech infrastructure.</p>
-    <div class="empty">No articles published yet. Notes will appear here — and as ordinary crawlable pages — as they are written.</div>`);
+    <p class="lede">Writing on AI-native product engineering and African fintech infrastructure. Every note is also an ordinary crawlable page.</p>
+    ${O.articles.map((a) => `
+      <article class="card">
+        <div class="card__top"><h3 class="card__name">${esc(a.title)}</h3><span class="card__meta">${esc(a.date)}</span></div>
+        <p style="margin:0 0 10px">${esc(a.description)}</p>
+        <a class="linkout" href="${esc(a.url)}" target="_blank" rel="noreferrer noopener">Read the note →</a>
+      </article>`).join("")}`);
 }
 
 /* ---------- Contact ---------- */
@@ -504,17 +515,49 @@ function renderContact() {
     try { await navigator.clipboard.writeText(O.conversion.email); e.target.textContent = "Copied ✓"; }
     catch { e.target.textContent = O.conversion.email; }
   };
-  wrap.querySelector("#brief").addEventListener("submit", (e) => {
+  /*
+   * Real delivery via FormSubmit's AJAX endpoint — briefs arrive in the
+   * owner's inbox without an API key or client-side secret. If the network
+   * call fails, degrade to the mailto handoff so no lead is ever lost.
+   */
+  wrap.querySelector("#brief").addEventListener("submit", async (e) => {
     e.preventDefault();
     const f = e.target;
     if (f["company-website"].value) return;            // honeypot tripped
     const msg = wrap.querySelector("#brief-msg");
-    msg.textContent = "Thanks — opening your mail client as a fallback while the form provider is configured.";
-    companionState("excited");
-    const body = encodeURIComponent(
-      `Name: ${f.name.value}\nEmail: ${f.email.value}\n\nBuild: ${f.build.value}\nTimeline: ${f.timeline.value}\nRange: ${f.budget.value}\nSuccess: ${f.success.value}`
-    );
-    location.href = `mailto:${O.conversion.email}?subject=${encodeURIComponent("Project brief — " + f.name.value)}&body=${body}`;
+    const btn = f.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    msg.textContent = "Sending…";
+    const payload = {
+      name: f.name.value,
+      email: f.email.value,
+      build: f.build.value,
+      timeline: f.timeline.value,
+      budget: f.budget.value,
+      success: f.success.value,
+      _subject: "Skamber OS project brief — " + f.name.value,
+      _template: "table",
+      _captcha: "false"
+    };
+    try {
+      const r = await fetch(`https://formsubmit.co/ajax/${O.conversion.email}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!r.ok) throw new Error("send failed");
+      msg.textContent = "Brief sent — I'll reply by email. Thanks!";
+      companionState("excited");
+      f.reset();
+    } catch {
+      msg.textContent = "Direct send failed — opening your mail client instead so nothing is lost.";
+      const body = encodeURIComponent(
+        `Name: ${payload.name}\nEmail: ${payload.email}\n\nBuild: ${payload.build}\nTimeline: ${payload.timeline}\nRange: ${payload.budget}\nSuccess: ${payload.success}`
+      );
+      location.href = `mailto:${O.conversion.email}?subject=${encodeURIComponent("Project brief — " + payload.name)}&body=${body}`;
+    } finally {
+      btn.disabled = false;
+    }
   });
   return wrap;
 }
