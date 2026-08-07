@@ -11,9 +11,9 @@ export const ownerProfile = {
     fullName: "Musa Sulaiman",
     shortName: "Musa",
     osName: "Skamber OS",
-    // C2: personal domain not yet supplied. Single source of truth —
-    // metadata, canonical, OG, JSON-LD and sitemap all read this constant.
-    domain: "PENDING_DOMAIN",
+    // Single source of truth — metadata, canonical, OG, JSON-LD and
+    // sitemap all derive from this constant.
+    domain: "skamber.xyz",
     location: "Kebbi, Nigeria",
     timezone: "Africa/Lagos",
     timezoneLabel: "WAT",
