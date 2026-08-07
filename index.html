@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Musa Sulaiman — Skamber OS</title>
+<meta name="description" content="Musa Sulaiman is an AI product engineer and founder in Kebbi, Nigeria, building AI-native products and fintech infrastructure. Founder of Zipa." />
+<meta name="author" content="Musa Sulaiman" />
+<meta name="theme-color" content="#0d2f26" />
+<link rel="icon" href="assets/portraits/avatar-mark.png" />
+<meta property="og:type" content="profile" />
+<meta property="og:title" content="Musa Sulaiman — Skamber OS" />
+<meta property="og:description" content="AI product engineer and founder. Building AI-native products and fintech infrastructure across Africa." />
+<meta property="og:image" content="assets/portraits/avatar-hero.webp" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="@0xSkamber" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Musa Sulaiman",
+  "jobTitle": "AI Product Engineer",
+  "description": "AI product engineer and founder building AI-native products and fintech infrastructure across Africa.",
+  "address": { "@type": "PostalAddress", "addressLocality": "Kebbi", "addressCountry": "NG" },
+  "sameAs": ["https://x.com/0xSkamber", "https://github.com/KAMBAH123"],
+  "knowsAbout": ["AI product engineering", "Fintech infrastructure", "Full-stack development"],
+  "owns": { "@type": "SoftwareApplication", "name": "Zipa", "url": "https://usezipa.xyz", "applicationCategory": "FinanceApplication" }
+}
+</script>
+</head>
+<body>
+
+<!-- ============ BOOT ============ -->
+<div id="boot" class="boot" role="status" aria-live="polite">
+  <div class="boot__inner">
+    <img class="boot__mark" src="assets/portraits/avatar-mark.png" alt="" width="72" height="72" />
+    <p class="boot__os" id="boot-os"></p>
+    <p class="boot__line">Loading portfolio — projects, case files, proof, contact.</p>
+    <div class="boot__bar"><span id="boot-fill"></span></div>
+    <p class="boot__ver">v1.0.0</p>
+    <button class="boot__skip" id="boot-skip" type="button">Skip boot</button>
+  </div>
+</div>
+
+<!-- ============ SYSTEM NAV ============ -->
+<header class="sysnav" role="banner">
+  <div class="sysnav__group">
+    <img class="sysnav__mark" src="assets/portraits/avatar-mark.png" alt="" width="26" height="26" />
+    <span class="sysnav__os" id="nav-os"></span>
+  </div>
+  <nav class="sysnav__group sysnav__links" aria-label="Primary">
+    <button class="sysnav__link" data-open="projects" type="button">Work</button>
+    <button class="sysnav__link" data-open="results" type="button">Proof</button>
+    <button class="sysnav__link" data-open="systems" type="button">Method</button>
+    <button class="sysnav__link" id="nav-search" type="button" aria-keyshortcuts="Meta+K Control+K">Search <kbd>⌘K</kbd></button>
+  </nav>
+  <div class="sysnav__group sysnav__right">
+    <div class="themeswitch" role="group" aria-label="Appearance">
+      <button type="button" data-theme-set="day" title="Day">Day</button>
+      <button type="button" data-theme-set="night" title="Night">Night</button>
+      <button type="button" data-theme-set="dark" title="Dark">Dark</button>
+    </div>
+    <span class="avail" id="avail"><i aria-hidden="true"></i><span id="avail-text">Available</span></span>
+    <span class="sysnav__clock"><span id="clock-date"></span> · <span id="clock-time"></span> <span id="clock-tz"></span></span>
+  </div>
+</header>
+
+<!-- ============ DESKTOP ============ -->
+<main class="desktop" id="desktop">
+  <div class="wallpaper" aria-hidden="true">
+    <span class="wp-glow wp-glow--a"></span>
+    <span class="wp-glow wp-glow--b"></span>
+    <span class="wp-grid"></span>
+  </div>
+
+  <!-- Daily Transmission -->
+  <section class="widget transmission" id="transmission" data-draggable="transmission" aria-label="Daily transmission">
+    <header class="widget__bar">
+      <span class="widget__dot" aria-hidden="true"></span>
+      <span class="widget__title">Daily Transmission</span>
+      <span class="widget__os" id="tx-os"></span>
+    </header>
+    <p class="transmission__date" id="tx-date"></p>
+    <p class="transmission__quote" id="tx-quote"></p>
+    <button class="btn btn--ghost btn--sm" data-open="whiteboard" type="button">Add a quick sticky</button>
+  </section>
+
+  <!-- Identity -->
+  <section class="identity" aria-label="Owner identity">
+    <p class="identity__eyebrow" id="id-roles"></p>
+    <h1 class="identity__name" id="id-name"></h1>
+    <p class="identity__descriptor"><span id="id-descriptor"></span><i class="caret" aria-hidden="true"></i></p>
+    <p class="identity__intro" id="id-intro"></p>
+    <div class="identity__cta">
+      <button class="btn btn--primary" id="cta-primary" type="button"></button>
+      <button class="btn btn--outline" id="cta-secondary" type="button"></button>
+    </div>
+    <ul class="identity__metrics" id="id-metrics"></ul>
+  </section>
+
+  <!-- Portrait -->
+  <figure class="portrait" aria-hidden="true">
+    <img id="portrait-img" src="assets/portraits/avatar-hero.webp" alt="" width="320" height="320" loading="lazy" />
+  </figure>
+
+  <!-- App grid -->
+  <section class="apps" id="apps" aria-label="Applications"></section>
+
+  <!-- Folded corner call tab -->
+  <button class="foldtab" id="foldtab" type="button">
+    <span class="foldtab__inner">
+      <span class="foldtab__q">Want this for yourself?</span>
+      <span class="foldtab__a">Book a call</span>
+    </span>
+  </button>
+</main>
+
+<!-- ============ COMPANION ============ -->
+<div class="companion" id="companion" data-state="idle">
+  <img id="companion-img" src="assets/companion/companion-idle.png" alt="Skamber OS companion" width="76" height="112" />
+  <button class="companion__reset" id="companion-reset" type="button" title="Reset companion position">Reset</button>
+</div>
+
+<!-- ============ DOCK ============ -->
+<nav class="dock" id="dock" aria-label="Dock"></nav>
+
+<!-- ============ WINDOW LAYER ============ -->
+<div class="windows" id="windows"></div>
+
+<!-- ============ COMMAND PALETTE ============ -->
+<div class="palette" id="palette" hidden>
+  <div class="palette__scrim" data-palette-close></div>
+  <div class="palette__box" role="dialog" aria-modal="true" aria-label="Search Skamber OS">
+    <input id="palette-input" type="text" placeholder="Search apps, projects, contact…" autocomplete="off" spellcheck="false" />
+    <ul id="palette-results" role="listbox"></ul>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
