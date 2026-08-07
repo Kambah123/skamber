@@ -180,7 +180,38 @@ export const ownerProfile = {
     }
   ],
   achievements: [],
-  journey: [],
+
+  /*
+   * Journey — drafted from facts already on record (owner-stated or publicly
+   * verifiable). Owner to correct and extend; nothing here is invented.
+   */
+  journey: [
+    {
+      year: "2025",
+      title: "All in on building",
+      body: "Committed to software as the craft. Started shipping publicly — the GitHub account that now holds 50+ repositories dates from March 2025."
+    },
+    {
+      year: "2025",
+      title: "OneDev Studio",
+      body: "Founded a small studio practice: product design, full-stack builds and AI integration for teams that want software shipped, not prototyped forever."
+    },
+    {
+      year: "2025 — 2026",
+      title: "Zipa, built solo",
+      body: "Designed and engineered a username-first crypto bank end to end — embedded wallets, an instant internal ledger, AI transaction explanations, naira-aware balances, five Nigerian languages. One person, production-grade scope."
+    },
+    {
+      year: "2026",
+      title: "Zipa goes public",
+      body: "Live public beta on test networks: free to use, real on-chain rails on Solana, Ethereum and Base. The unglamorous parts — custody, compliance, mainnet — are the current frontier."
+    },
+    {
+      year: "2026",
+      title: "Skamber OS",
+      body: "Shipped this operating system as a portfolio: every claim verified or labelled, every app functional. The site itself is the case study."
+    }
+  ],
 
   services: [
     {
@@ -214,7 +245,15 @@ export const ownerProfile = {
     }
   ],
 
-  articles: [],
+  articles: [
+    {
+      title: "Building a username-first crypto bank in Nigeria",
+      description:
+        "Why sending money to a 44-character address is a design failure, and what it takes to replace it with @handles — embedded wallets, an internal ledger, and honest beta constraints.",
+      url: "blog/username-first-crypto-bank-nigeria.html",
+      date: "2026-08-07"
+    }
+  ],
 
   /*
    * Voice agents. `enabled: false` renders the maintenance state.
